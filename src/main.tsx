@@ -4,11 +4,14 @@ import App from "./App";
 import "./index.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme";
+import Layout from "./Layout";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <App />
+      <Layout>
+        <App />
+      </Layout>
     </ChakraProvider>
   </React.StrictMode>
 );

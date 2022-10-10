@@ -49,10 +49,13 @@ export default function UploadPicture() {
       flexDirection="column"
       alignItems="center"
     >
+      {/*    
       <Image
         src={fileDataURL !== null ? fileDataURL : ""}
         paddingBottom="12px"
-      />
+      /> 
+      */}
+
       <AspectRatio width="64" ratio={1}>
         <Box
           borderColor="primary"
