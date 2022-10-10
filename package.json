@@ -1,5 +1,5 @@
 {
-  "name": "picture-on-the-wall",
+  "name": "wall-decor-previewer",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -17,7 +17,7 @@
   "devDependencies": {
     "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",
-    "@vitejs/plugin-react": "^2.1.0",
+    "@vitejs/plugin-react": "2.1.0",
     "typescript": "4.6.4",
     "vite": "3.1.0"
   }
