@@ -2,10 +2,10 @@ import { extendTheme } from "@chakra-ui/react";
 
 const overrides = {
   colors: {
-    primary: "#319795",
-    secondary: "#edf2f7",
-    hover: "#2c7a7b",
-    pressed: "#2c7a7b",
+    primary: "#bba677",
+    secondary: "#bba677",
+    hover: "#bba677",
+    pressed: "#bba677",
     info: "#2BB2FF",
     warning: "#FFC633",
     success: "#06C270",
