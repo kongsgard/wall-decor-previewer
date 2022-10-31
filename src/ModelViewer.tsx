@@ -107,6 +107,7 @@ export const ModelViewer: FC = () => {
                 Width:
               </FormLabel>
               <Input
+                p="0 0 0 8px"
                 type="number"
                 value={isNaN(width) ? "" : width}
                 onChange={(e) => {
@@ -122,6 +123,7 @@ export const ModelViewer: FC = () => {
                 Height:
               </FormLabel>
               <Input
+                p="0 0 0 8px"
                 type="number"
                 value={isNaN(height) ? "" : height}
                 onChange={(e) => {

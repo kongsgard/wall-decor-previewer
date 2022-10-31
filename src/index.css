@@ -7,33 +7,8 @@ body {
 }
 
 .header {
-  background: #bf953f;
-  background: -moz-linear-gradient(
-    to right,
-    #bf953f,
-    #fcf6ba,
-    #b38728,
-    #fbf5b7,
-    #aa771c
-  );
-  background: -webkit-linear-gradient(
-    to right,
-    #bf953f,
-    #fcf6ba,
-    #b38728,
-    #fbf5b7,
-    #aa771c
-  );
-  background: linear-gradient(
-    to right,
-    #bf953f,
-    #fcf6ba,
-    #b38728,
-    #fbf5b7,
-    #aa771c
-  );
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#22c1c3",endColorstr="#b12dfd",GradientType=1);
-  opacity: 0.8;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
 }
 
 .model-viewer {
@@ -47,9 +22,13 @@ body {
   transform: translateX(-50%);
   top: 16px;
   padding: 8px;
-  border: 1px solid #bf953f;
+  border: 1px solid #3182ce;
   border-radius: 8px;
-  background-color: white;
+  background-color: #3182ce;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .controls {
@@ -70,10 +49,14 @@ input[type="file"] {
   display: inline-block;
   cursor: pointer;
   padding: 8px;
-  border: 1px solid #bf953f;
+  border: 1px solid #3182ce;
   border-radius: 8px;
-  background-color: white;
+  background-color: #3182ce;
   text-align: center;
+  color: #fff;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .controls-size {
