@@ -34,8 +34,13 @@ export const ModelViewer: FC = () => {
       image.onload = function () {
         const w = parseFloat(this.width);
         const h = parseFloat(this.height);
-        setWidth(convertPixelsToMeters(w));
-        setHeight(convertPixelsToMeters(h));
+
+        const scalingFactor = Math.pow(
+          10,
+          Math.floor(Math.log10(Math.max(w, h)))
+        );
+        setWidth(convertPixelsToMeters(w, scalingFactor));
+        setHeight(convertPixelsToMeters(h, scalingFactor));
       };
 
       if (modelViewerRef) {
@@ -108,7 +113,10 @@ export const ModelViewer: FC = () => {
   );
 };
 
-function convertPixelsToMeters(pixels: number): number {
-  const size = pixels / Math.pow(10, Math.floor(Math.log10(pixels)));
+function convertPixelsToMeters(
+  pixels: number,
+  scalingFactor: number = 1.0
+): number {
+  const size = pixels / scalingFactor;
   return Math.round((size + Number.EPSILON) * 100) / 100;
 }
