@@ -5,25 +5,51 @@ import { InputGroup, Input, InputRightAddon, Text } from "@chakra-ui/react";
 export const ModelViewer: FC = () => {
   const [width, setWidth] = useState(1);
   const [height, setHeight] = useState(1);
-  const [modelViewerTransform, setModelViewerTransform] =
-    useState<Element | null>(null);
+  const [modelViewerRef, setModelViewerRef] = useState<Element | null>(null);
 
   useEffect(() => {
-    setModelViewerTransform(document.querySelector("model-viewer"));
+    setModelViewerRef(document.querySelector("model-viewer"));
   }, []);
 
   useEffect(() => {
     const updateScale = () => {
-      if (modelViewerTransform) {
-        modelViewerTransform.scale = `${width} ${height} 1`;
-        modelViewerTransform.updateFraming();
+      if (modelViewerRef) {
+        modelViewerRef.scale = `${width} ${height} 1`;
+        modelViewerRef.updateFraming();
       }
     };
 
-    if (!isNaN(width) && !isNaN(height)) {
+    if (!(isNaN(width) || isNaN(height))) {
       updateScale();
     }
   }, [width, height]);
+
+  const onImageLoad = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const file = files[0];
+      const fileURL = URL.createObjectURL(file);
+      const image = new Image();
+      image.src = fileURL;
+      image.onload = function () {
+        const w = parseFloat(this.width);
+        const h = parseFloat(this.height);
+        setWidth(convertPixelsToMeters(w));
+        setHeight(convertPixelsToMeters(h));
+      };
+
+      if (modelViewerRef) {
+        // Apply the texture to the model
+        const texture = await modelViewerRef.createTexture(fileURL);
+        texture.name = file.name;
+        const material = modelViewerRef.model.materials[0];
+        console.log(material);
+        material["pbrMetallicRoughness"]["baseColorTexture"].setTexture(
+          texture
+        );
+      }
+    }
+  };
 
   return (
     <model-viewer
@@ -39,13 +65,23 @@ export const ModelViewer: FC = () => {
         🪄 Activate AR
       </button>
       <div className="controls">
+        <label className="controls-file-upload">
+          <input
+            type="file"
+            aria-hidden="true"
+            accept="image/*"
+            onChange={onImageLoad}
+          />
+          Upload Image
+        </label>
+
         <div className="controls-size">
           <label>
             <Text mb="8px">Width:</Text>
             <InputGroup maxW={32}>
               <Input
                 type="number"
-                defaultValue={1}
+                value={isNaN(width) ? "" : width}
                 onChange={(e) => {
                   setWidth(parseFloat(e.target.value));
                 }}
@@ -58,7 +94,7 @@ export const ModelViewer: FC = () => {
             <InputGroup maxW={32}>
               <Input
                 type="number"
-                defaultValue={1}
+                value={isNaN(height) ? "" : height}
                 onChange={(e) => {
                   setHeight(parseFloat(e.target.value));
                 }}
@@ -71,3 +107,8 @@ export const ModelViewer: FC = () => {
     </model-viewer>
   );
 };
+
+function convertPixelsToMeters(pixels: number): number {
+  const size = pixels / Math.pow(10, Math.floor(Math.log10(pixels)));
+  return Math.round((size + Number.EPSILON) * 100) / 100;
+}
