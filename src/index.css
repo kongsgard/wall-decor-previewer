@@ -82,5 +82,7 @@ input[type="file"] {
   gap: 20px;
   padding: 8px;
   border-radius: 4px;
-  background-color: white;
+  background: white;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  margin-top: 5px;
 }

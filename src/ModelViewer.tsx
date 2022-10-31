@@ -1,11 +1,19 @@
 import { FC, useEffect, useState } from "react";
 import "@google/model-viewer";
-import { InputGroup, Input, InputRightAddon, Text } from "@chakra-ui/react";
+import {
+  InputGroup,
+  Input,
+  InputRightAddon,
+  Text,
+  Checkbox,
+  FormLabel,
+} from "@chakra-ui/react";
 
 export const ModelViewer: FC = () => {
   const [width, setWidth] = useState(1);
   const [height, setHeight] = useState(1);
   const [modelViewerRef, setModelViewerRef] = useState<any | null>(null);
+  const [keepRatio, setKeepRatio] = useState(true);
 
   useEffect(() => {
     setModelViewerRef(document.querySelector("model-viewer"));
@@ -32,17 +40,19 @@ export const ModelViewer: FC = () => {
       const image = new Image();
       image.src = fileURL;
       image.onload = function () {
-        // @ts-ignore
-        const w = parseFloat(this.width);
-        // @ts-ignore
-        const h = parseFloat(this.height);
+        if (keepRatio) {
+          // @ts-ignore
+          const w = parseFloat(this.width);
+          // @ts-ignore
+          const h = parseFloat(this.height);
 
-        const scalingFactor = Math.pow(
-          10,
-          Math.floor(Math.log10(Math.max(w, h)))
-        );
-        setWidth(convertPixelsToMeters(w, scalingFactor));
-        setHeight(convertPixelsToMeters(h, scalingFactor));
+          const scalingFactor = Math.pow(
+            10,
+            Math.floor(Math.log10(Math.max(w, h)))
+          );
+          setWidth(convertPixelsToMeters(w, scalingFactor));
+          setHeight(convertPixelsToMeters(h, scalingFactor));
+        }
       };
 
       if (modelViewerRef) {
@@ -83,9 +93,19 @@ export const ModelViewer: FC = () => {
         </label>
 
         <div className="controls-size">
+          <Checkbox
+            isChecked={keepRatio}
+            onChange={(e) => setKeepRatio(e.target.checked)}
+          >
+            Keep aspect ratio
+          </Checkbox>
+        </div>
+        <div className="controls-size">
           <label>
-            <Text mb="8px">Width:</Text>
-            <InputGroup maxW={32}>
+            <InputGroup maxW={32} display="flex" alignItems="center">
+              <FormLabel mb="0" fontSize="0.8em" mr="5px">
+                Width:
+              </FormLabel>
               <Input
                 type="number"
                 value={isNaN(width) ? "" : width}
@@ -93,12 +113,14 @@ export const ModelViewer: FC = () => {
                   setWidth(parseFloat(e.target.value));
                 }}
               />
-              <InputRightAddon children="m" />
+              <InputRightAddon fontSize="0.8em" children="m" p="10px" />
             </InputGroup>
           </label>
           <label>
-            <Text mb="8px">Height:</Text>
-            <InputGroup maxW={32}>
+            <InputGroup maxW={32} display="flex" alignItems="center">
+              <FormLabel mb="0" fontSize="0.8em" mr="5px">
+                Height:
+              </FormLabel>
               <Input
                 type="number"
                 value={isNaN(height) ? "" : height}
@@ -106,7 +128,7 @@ export const ModelViewer: FC = () => {
                   setHeight(parseFloat(e.target.value));
                 }}
               />
-              <InputRightAddon children="m" />
+              <InputRightAddon fontSize="0.8em" children="m" p="10px" />
             </InputGroup>
           </label>
         </div>
