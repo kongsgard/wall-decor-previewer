@@ -37,6 +37,34 @@ body {
 }
 
 .model-viewer {
-  height: 100vh;
-  width: 100vw;
+  height: calc(100vh - 60px);
+  width: 100%;
+}
+
+.ar-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 16px;
+  padding: 8px;
+  border: 1px solid #bf953f;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.controls {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+}
+
+.controls-size {
+  display: flex;
+  gap: 20px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: white;
 }
