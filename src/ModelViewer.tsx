@@ -5,7 +5,7 @@ import { InputGroup, Input, InputRightAddon, Text } from "@chakra-ui/react";
 export const ModelViewer: FC = () => {
   const [width, setWidth] = useState(1);
   const [height, setHeight] = useState(1);
-  const [modelViewerRef, setModelViewerRef] = useState<Element | null>(null);
+  const [modelViewerRef, setModelViewerRef] = useState<any | null>(null);
 
   useEffect(() => {
     setModelViewerRef(document.querySelector("model-viewer"));
@@ -32,7 +32,9 @@ export const ModelViewer: FC = () => {
       const image = new Image();
       image.src = fileURL;
       image.onload = function () {
+        // @ts-ignore
         const w = parseFloat(this.width);
+        // @ts-ignore
         const h = parseFloat(this.height);
 
         const scalingFactor = Math.pow(
