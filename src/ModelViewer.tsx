@@ -4,16 +4,22 @@ import {
   InputGroup,
   Input,
   InputRightAddon,
-  Text,
   Checkbox,
   FormLabel,
 } from "@chakra-ui/react";
+import {
+  computePixelsToMetersScalingFactor,
+  convertPixelsToMeters,
+} from "./utils";
 
 export const ModelViewer: FC = () => {
   const [width, setWidth] = useState(1);
   const [height, setHeight] = useState(1);
+  const [prevWidth, setPrevWidth] = useState(1);
+  const [prevHeight, setPrevHeight] = useState(1);
+
   const [modelViewerRef, setModelViewerRef] = useState<any | null>(null);
-  const [keepRatio, setKeepRatio] = useState(true);
+  const [keepAspectRatio, setKeepAspectRatio] = useState(true);
 
   useEffect(() => {
     setModelViewerRef(document.querySelector("model-viewer"));
@@ -40,19 +46,14 @@ export const ModelViewer: FC = () => {
       const image = new Image();
       image.src = fileURL;
       image.onload = function () {
-        if (keepRatio) {
-          // @ts-ignore
-          const w = parseFloat(this.width);
-          // @ts-ignore
-          const h = parseFloat(this.height);
+        // @ts-ignore
+        const w = parseFloat(this.width);
+        // @ts-ignore
+        const h = parseFloat(this.height);
 
-          const scalingFactor = Math.pow(
-            10,
-            Math.floor(Math.log10(Math.max(w, h)))
-          );
-          setWidth(convertPixelsToMeters(w, scalingFactor));
-          setHeight(convertPixelsToMeters(h, scalingFactor));
-        }
+        const scalingFactor = computePixelsToMetersScalingFactor(w, h);
+        setWidth(convertPixelsToMeters(w, scalingFactor));
+        setHeight(convertPixelsToMeters(h, scalingFactor));
       };
 
       if (modelViewerRef) {
@@ -94,8 +95,8 @@ export const ModelViewer: FC = () => {
 
         <div className="controls-size">
           <Checkbox
-            isChecked={keepRatio}
-            onChange={(e) => setKeepRatio(e.target.checked)}
+            isChecked={keepAspectRatio}
+            onChange={(e) => setKeepAspectRatio(e.target.checked)}
           >
             Keep aspect ratio
           </Checkbox>
@@ -110,9 +111,11 @@ export const ModelViewer: FC = () => {
                 p="0 0 0 8px"
                 type="number"
                 value={isNaN(width) ? "" : width}
-                onChange={(e) => {
-                  setWidth(parseFloat(e.target.value));
-                }}
+                onChange={(e) => setWidth(parseFloat(e.target.value))}
+                onFocus={() => setPrevWidth(width)}
+                onBlur={() =>
+                  keepAspectRatio && setHeight(height * (width / prevWidth))
+                }
               />
               <InputRightAddon fontSize="0.8em" children="m" p="10px" />
             </InputGroup>
@@ -126,9 +129,11 @@ export const ModelViewer: FC = () => {
                 p="0 0 0 8px"
                 type="number"
                 value={isNaN(height) ? "" : height}
-                onChange={(e) => {
-                  setHeight(parseFloat(e.target.value));
-                }}
+                onChange={(e) => setHeight(parseFloat(e.target.value))}
+                onFocus={() => setPrevHeight(height)}
+                onBlur={() =>
+                  keepAspectRatio && setWidth(width * (height / prevHeight))
+                }
               />
               <InputRightAddon fontSize="0.8em" children="m" p="10px" />
             </InputGroup>
@@ -138,11 +143,3 @@ export const ModelViewer: FC = () => {
     </model-viewer>
   );
 };
-
-function convertPixelsToMeters(
-  pixels: number,
-  scalingFactor: number = 1.0
-): number {
-  const size = pixels / scalingFactor;
-  return Math.round((size + Number.EPSILON) * 100) / 100;
-}
